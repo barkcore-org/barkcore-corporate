@@ -347,6 +347,23 @@ br.sp{display:none}
 .final .body{margin-top:28px;font-size:16px;line-height:2;color:#c9dcdb}
 .apply{display:grid;gap:14px}
 .apply .btn{height:56px;width:100%}
+.final .wrap{align-items:center}
+.fm{display:grid;gap:14px}
+.fm .f{display:grid;gap:6px}
+.fm label{font-size:13px;font-weight:700;color:#fff}
+.fm label .r,.fm label .o{margin-left:8px;font-size:11.5px;font-weight:500;color:#c9dcdb}
+.fm label .r{color:#ffe7a6}
+.fm input,.fm textarea,.fm select{width:100%;padding:12px 14px;border:1px solid transparent;border-radius:var(--r);background:#fff;color:var(--ink);font:inherit;font-size:16px;line-height:1.6}
+.fm textarea{resize:vertical;min-height:104px}
+.fm input:focus-visible,.fm textarea:focus-visible,.fm select:focus-visible{outline:2px solid #ffe7a6;outline-offset:2px}
+.fm input[aria-invalid="true"],.fm textarea[aria-invalid="true"]{border-color:var(--err);background:var(--errbg)}
+.fm .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.fm .agree{font-size:12.5px;line-height:1.8;color:#c9dcdb}
+.fm .agree a{color:#fff;text-decoration:underline}
+.fm .fmsg{display:none;padding:12px 14px;border-radius:var(--r);font-size:14px;line-height:1.7}
+.fm .fmsg.ok{display:block;background:var(--okbg);color:var(--ok)}
+.fm .fmsg.ng{display:block;background:var(--errbg);color:var(--err)}
+.fm button[disabled]{opacity:.6;cursor:wait}
 .apply .alt{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid rgba(255,255,255,.2);border-bottom:1px solid rgba(255,255,255,.2)}
 .apply .alt div{padding:14px 0}
 .apply .alt div+div{padding-left:16px;border-left:1px solid rgba(255,255,255,.2)}
@@ -836,8 +853,20 @@ footer .cp{width:100%;font:500 12px var(--en);color:#8fb1b0;margin-top:20px}
    <p class="body">入力ミス。ダブルチェック。担当者への確認。紙とExcelの見比べ。<br>今の業務の中に、減らせる確認作業があるかもしれません。</p>
   </div>
   <div class="apply">
-   <a class="btn wh" href="mailto:info@barkcore.co.jp?subject=%E3%80%9030%E5%88%86%E7%84%A1%E6%96%99%E7%9B%B8%E8%AB%87%E3%80%91%E7%94%B3%E3%81%97%E8%BE%BC%E3%81%BF&amp;body=%E4%BC%9A%E7%A4%BE%E5%90%8D%EF%BC%9A%0A%E3%81%8A%E5%90%8D%E5%89%8D%EF%BC%9A%0A%E3%81%94%E7%9B%B8%E8%AB%87%E5%86%85%E5%AE%B9%EF%BC%88%E3%81%B2%E3%81%A8%E3%81%93%E3%81%A8%E3%81%A7%E5%A4%A7%E4%B8%88%E5%A4%AB%E3%81%A7%E3%81%99%EF%BC%89%EF%BC%9A%0A%E3%81%94%E5%B8%8C%E6%9C%9B%E3%81%AE%E6%97%A5%E6%99%82%EF%BC%88%E5%80%99%E8%A3%9C%E3%82%922%E3%80%9C3%E3%81%A4%EF%BC%89%EF%BC%9A%0A%E3%81%94%E5%B8%8C%E6%9C%9B%E3%81%AE%E7%9B%B8%E8%AB%87%E6%96%B9%E6%B3%95%EF%BC%88%E3%82%AA%E3%83%B3%E3%83%A9%E3%82%A4%E3%83%B3%EF%BC%8F%E3%81%8A%E9%9B%BB%E8%A9%B1%EF%BC%89%EF%BC%9A%0A"><svg class="ic" aria-hidden="true"><use href="#i-mail"/></svg>30分無料で相談する</a>
-   <p class="hint">押すと、記入欄の入ったメールが開きます。開かない場合は下のアドレスへ、件名「30分無料相談」でお送りください。1営業日以内にご返信します。</p>
+   <form class="fm" id="fm" action="/api/contact" method="post" novalidate>
+    <input type="hidden" name="source" value="lp-kaizen">
+    <div class="hp" aria-hidden="true"><label>空欄のままにしてください<input name="website" tabindex="-1" autocomplete="off"></label></div>
+    <div class="f"><label for="fc">会社名<span class="o">任意</span></label><input id="fc" name="company" maxlength="200" autocomplete="organization"></div>
+    <div class="f"><label for="fn">お名前<span class="r">必須</span></label><input id="fn" name="name" maxlength="100" required autocomplete="name"></div>
+    <div class="f"><label for="fe">メールアドレス<span class="r">必須</span></label><input id="fe" name="email" type="email" maxlength="200" required autocomplete="email" inputmode="email"></div>
+    <div class="f"><label for="fm-t">ご相談内容<span class="o">ひとことで大丈夫です</span></label><textarea id="fm-t" name="message" maxlength="3000" rows="4" placeholder="例：請求書とExcelの突き合わせに時間がかかっている"></textarea></div>
+    <div class="f"><label for="fd">ご希望の日時<span class="o">候補を2〜3つ</span></label><input id="fd" name="schedule" maxlength="300" placeholder="例：来週火曜の午後、金曜の午前"></div>
+    <div class="f"><label for="fw">ご希望の相談方法</label><select id="fw" name="method"><option>オンライン</option><option>お電話</option></select></div>
+    <p class="agree">送信すると<a href="/privacy.html" target="_blank" rel="noopener">プライバシーポリシー</a>に同意したものとします。いただいた内容は、ご相談への返信のためだけに使います。</p>
+    <div id="fm-msg" class="fmsg" role="status" aria-live="polite"></div>
+    <button class="btn wh" type="submit"><svg class="ic" aria-hidden="true"><use href="#i-mail"/></svg>30分無料で相談する</button>
+    <p class="hint">1営業日以内にご返信します。フォームが使えない場合は、下のメールアドレスか電話でご連絡ください。</p>
+   </form>
    <div class="alt">
     <div><small>メール</small><a class="m" href="mailto:info@barkcore.co.jp">info@barkcore.co.jp</a></div>
     <div><small>電話（平日 9:00〜18:00）</small><a href="tel:05088934996" aria-label="電話で相談する 050-8893-4996（平日 9:00〜18:00）">050-8893-4996</a></div>
@@ -861,6 +890,25 @@ footer .cp{width:100%;font:500 12px var(--en);color:#8fb1b0;margin-top:20px}
 
 <div class="mcta" id="mcta" aria-hidden="true"><a class="btn" href="#apply" tabindex="-1">30分無料で相談する</a></div>
 
+<script>
+(function(){
+ var f=document.getElementById('fm');if(!f)return;
+ var msg=document.getElementById('fm-msg'),btn=f.querySelector('button');
+ function show(t,c){msg.textContent=t;msg.className='fmsg '+c}
+ f.addEventListener('submit',function(e){
+  e.preventDefault();
+  var bad=false;
+  ['fn','fe'].forEach(function(id){var el=document.getElementById(id),ok=el.checkValidity()&&el.value.trim();el.setAttribute('aria-invalid',ok?'false':'true');if(!ok)bad=true});
+  if(bad){show('お名前とメールアドレスを正しく入力してください。','ng');return}
+  btn.disabled=true;show('送信しています…','ok');
+  var d={};new FormData(f).forEach(function(v,k){d[k]=v});
+  fetch('/api/contact',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(d)})
+   .then(function(r){if(!r.ok)throw 0;f.reset();show('送信しました。ありがとうございます。1営業日以内にご返信します。','ok')})
+   .catch(function(){show('送信できませんでした。お手数ですが、下のメールアドレスか電話でご連絡ください。','ng')})
+   .then(function(){btn.disabled=false});
+ });
+})();
+</script>
 <script>
 (function(){
  var hd=document.getElementById('hd');
