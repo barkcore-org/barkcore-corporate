@@ -1,0 +1,6 @@
+# 公開しないファイル
+wrangler.jsonc
+.assetsignore
+src
+functions
+apps-script

@@ -1,7 +1,17 @@
+// /api/contact だけ受け付ける。ほかは wrangler.jsonc の assets がそのまま配信する
 // フォームの送信を受け取り、Googleスプレッドシート(Apps Script)に渡す受付係
 const MAX = { name: 100, email: 200, company: 200, message: 3000, schedule: 300, method: 20, source: 50 };
 
-export async function onRequestPost({ request, env }) {
+export default {
+  async fetch(request, env) {
+    const { pathname } = new URL(request.url);
+    if (pathname !== '/api/contact') return env.ASSETS.fetch(request);
+    if (request.method !== 'POST') return json({ ok: false }, 405);
+    return handleContact(request, env);
+  },
+};
+
+async function handleContact(request, env) {
   let data;
   try { data = await request.json(); } catch { return json({ ok: false }, 400); }
 
