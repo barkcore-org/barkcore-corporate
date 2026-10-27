@@ -32,7 +32,9 @@ async function handleContact(request, env) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(clean),
   });
-  return json({ ok: res.ok }, res.ok ? 200 : 502);
+  // Apps Scriptはエラーでも200を返すことがあるので、本文が ok のときだけ成功にする
+  const ok = res.ok && (await res.text()).trim() === 'ok';
+  return json({ ok }, ok ? 200 : 502);
 }
 
 const json = (body, status = 200) =>
